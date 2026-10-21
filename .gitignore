@@ -1,0 +1,44 @@
+
+# Dépendances Node.js
+node_modules/
+
+# Builds et fichiers générés
+dist/
+build/
+coverage/
+
+# Variables d'environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE et éditeurs
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Fichiers temporaires
+.tmp/
+.temp/
+
+# Cache Vite
+.vite/
+
+# Certificats et clés privées
+*.pem
+*.key
