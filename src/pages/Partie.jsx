@@ -1,4 +1,5 @@
 import GetResultat from "../services/ResultatService";
+import {addScore} from "../services/ScoreService"
 import { useEffect, useState } from "react";
 import GetMotDuJour from "../services/MotDuJourService";
 import Grille from "../components/Grille";
@@ -26,6 +27,8 @@ export default function Partie() {
     const[chargementApi, setChargementApi]=useState(false)
     const [apiInjoignable, setApiInjoignable] = useState(false);
     const[afficherClavier, setAfficherClavier] = useState(true);
+    const [ligneQuiTremble, setLigneQuiTremble] = useState(null);
+
 
     const [couleurs, setCouleurs] = useState([
         ["white","white","white","white","white"],
@@ -56,9 +59,11 @@ useEffect(() => {
             )
         );
     }
+const DUREE_RETOURNEMENT = 1800; 
+const DUREE_TREMBLEMENT = 500;
 
     function gererTouche(e) {
-        if (indexLigne > 5) return; // partie terminée
+        if (indexLigne > 5) return; 
 
         if (e.key === "Backspace" && !chargementApi) {
             e.preventDefault();
@@ -112,60 +117,80 @@ useEffect(() => {
             ));
             setIndexColonne(0)
     }
+
+
+    async function ValiderMot(motActuel)
+    {
+        let motValide;
+        setChargementApi(true);
+        try {
+            motValide = await motExiste(motActuel);
+        } catch (error) {
+            console.error("API injoignable :", error.message);
+            setApiInjoignable(true);
+            return; 
+        } finally {
+            setChargementApi(false);
+        }
+
+        if (!motValide)
+            {
+                setMotInvalide(true)
+                reinitialiserLigne()
+                            return false
+            } 
+            return true
+    }
+
     async function VerifierMot()
     {
-    let motActuel = grilleJeu[indexLigne].join("");
-    console.log(motActuel)
-    if(!motActuel ||motActuel.length < 5)
-    {
-        setMotInvalide(true)
-        reinitialiserLigne()
-        return
-    }
-
-    // API
-    let motValide;
-    setChargementApi(true);
-    try {
-        motValide = await motExiste(motActuel);
-    } catch (error) {
-        console.error("API injoignable :", error.message);
-        setApiInjoignable(true);
-        return; // on garde la ligne telle quelle, le joueur peut réessayer
-    } finally {
-        setChargementApi(false); // exécuté même après le return
-    }
-
-    if (!motValide)
+        let motActuel = grilleJeu[indexLigne].join("");
+        console.log(motActuel)
+        if(!motActuel ||motActuel.length < 5)
         {
             setMotInvalide(true)
             reinitialiserLigne()
-                        return
-        } 
+            return
+        }
 
-    let result = GetResultat(motDuJour, motActuel, indexLigne, lettresCouleur);
+        // API et verification vide ou espace 
+        if(!await ValiderMot(motActuel)) return
 
-    let nvCouleurs = [];
-    couleurs.forEach(ligneCouleur => nvCouleurs.push(ligneCouleur));
-    nvCouleurs[indexLigne] = result[0];
-    setCouleurs(nvCouleurs);
-    
-    //on change les couleurs du clavier
-    setLettresCouleur(result[3])
-    //on attribue les points
-    setPoints(result[2]);
+        let result = GetResultat(motDuJour, motActuel, indexLigne, lettresCouleur);
 
-    setIndexLigne(indexLigne + 1);
-    setIndexColonne(0);
+        let nvCouleurs = [];
+        couleurs.forEach(ligneCouleur => nvCouleurs.push(ligneCouleur));
+        nvCouleurs[indexLigne] = result[0];
+        setCouleurs(nvCouleurs);
+        
+        //on change les couleurs du clavier
+        setLettresCouleur(result[3])
+        //on attribue les points
+        setPoints(result[2]);
 
-    if (result[1]) {
-        setVictoire(true);
+        setIndexLigne(indexLigne + 1);
+        setIndexColonne(0);
+
+        if (result[1]) {
+            setVictoire(true);
+            addScore({
+                pseudo: localStorage.getItem("pseudo") ?? "Anonyme",
+                mot: motDuJour,
+                victoire: true,
+                essais: indexLigne+1,
+                points: result[2]});
+        }
+        else if (!result[1] && indexLigne == 5) {
+            setDefaite(true);
+            addScore({
+                pseudo: localStorage.getItem("pseudo") ?? "Anonyme",
+                mot: motDuJour,
+                victoire: false,
+                essais: indexLigne,
+                points: 0});
+        }
+        
     }
-    else if (!result[1] && indexLigne == 5) {
-        setDefaite(true);
-    }
-}
-
     return (
         <>
         {chargementApi == true && <Loading message={"Mot en verification..."}/>}

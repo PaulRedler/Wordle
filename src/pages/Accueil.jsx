@@ -15,7 +15,7 @@ useEffect(() => {
 
     
     function ValiderPseudo() {
-        localStorage.setItem("pseudo", JSON.stringify(pseudoTemp));
+        localStorage.setItem("pseudo", (pseudoTemp));
         console.log(localStorage.getItem("pseudo"));
         setPseudo(pseudoTemp);
     }
@@ -65,6 +65,12 @@ useEffect(() => {
 
 {pseudo !== "" && <button id="removePseudo" onClick={SupprimerPseudo}>Supprimer mon pseudo</button>}      
         <Link to={`/Partie`}>Partie du jour</Link>
+        <Link to={`/TableauScore`}>Tableau des scores</Link>
+
+        <Link to={`/Statistiques`}>Statistiques</Link>
+
+        <Link to={`/Regles`}>Règles</Link>
+
 
   </>
     );
