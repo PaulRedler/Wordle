@@ -6,12 +6,18 @@ import Toast from "../components/Toast";
 import Resultats from "../components/Resultats";
 import motExiste from "../services/ApiService";
 import Loading from "../components/Loading";
+import Clavier from "../components/Clavier"
 
 export default function Partie() {
     const [motDuJour, setMotDuJour] = useState("");
     const [indexLigne, setIndexLigne] = useState(0)
     const [indexColonne, setIndexColonne] = useState(0)
     const[points,setPoints]=useState(0)
+    const[lettresCouleur, setLettresCouleur]=useState({A: "white", Z: "white", E: "white", R: "white", T: "white",
+    Y: "white", U: "white", I: "white", O: "white", P: "white",
+    Q: "white", S: "white", D: "white", F: "white", G: "white",
+    H: "white", J: "white", K: "white", L: "white", M: "white",
+    W: "white", X: "white", C: "white", V: "white", B: "white", N: "white"})
 
     //booleen affichage
     const [defaite,setDefaite]=useState(false)
@@ -19,6 +25,7 @@ export default function Partie() {
     const[motInvalide, setMotInvalide]=useState(false)
     const[chargementApi, setChargementApi]=useState(false)
     const [apiInjoignable, setApiInjoignable] = useState(false);
+    const[afficherClavier, setAfficherClavier] = useState(true);
 
     const [couleurs, setCouleurs] = useState([
         ["white","white","white","white","white"],
@@ -81,7 +88,18 @@ useEffect(() => {
         console.log(mot);
     }, []);
 
+    function saisirAvecClic(lettre)
+    {
+         setGrilleJeu(g =>
+            g.map((ligne, i) =>
+                i === indexLigne
+                    ? ligne.map((c,j) => (j === indexColonne? c=lettre : c = c))
+                    : ligne
+            ));
+            if(indexColonne ==4) VerifierMot();
+                else setIndexColonne(indexColonne+1)
 
+    }
 
 
     function reinitialiserLigne()
@@ -118,12 +136,6 @@ useEffect(() => {
         setChargementApi(false); // exécuté même après le return
     }
 
-    if (!motValide) {
-        setMotInvalide(true);
-        reinitialiserLigne();
-        return;
-    }
-
     if (!motValide)
         {
             setMotInvalide(true)
@@ -131,14 +143,18 @@ useEffect(() => {
                         return
         } 
 
-    let result = GetResultat(motDuJour, motActuel, indexLigne);
+    let result = GetResultat(motDuJour, motActuel, indexLigne, lettresCouleur);
 
     let nvCouleurs = [];
     couleurs.forEach(ligneCouleur => nvCouleurs.push(ligneCouleur));
     nvCouleurs[indexLigne] = result[0];
     setCouleurs(nvCouleurs);
-
+    
+    //on change les couleurs du clavier
+    setLettresCouleur(result[3])
+    //on attribue les points
     setPoints(result[2]);
+
     setIndexLigne(indexLigne + 1);
     setIndexColonne(0);
 
@@ -157,13 +173,14 @@ useEffect(() => {
         {defaite === true &&  <Toast titre="Defaite..." message={`Vous n'avez pas trouvé le mot ${motDuJour}`} setBooleen={setDefaite}/>}
         {motInvalide === true && <Toast titre = "Mot invalide" message={"le mot entré n'existe pas veuillez en saisir un nouveau"} tempsAffichage = {3500} setBooleen={setMotInvalide} />}
         {victoire === true && <Toast titre="Victoire!" message="Vous avez gagnez !" setBooleen={setVictoire} />}
-        {(defaite == true ||victoire == true) && <Resultats points = {points}/>}
+        {(defaite == true ||victoire == true) && <Resultats points = {points} motDuJour={motDuJour}/>}
 
             <div id="grille">
             
                 <Grille indexColonne={indexColonne} indexLigne = {indexLigne }couleurs={couleurs} grille={grilleJeu} onChange={setGrilleJeu} />
             
             </div>
+            <Clavier lettresCouleur={lettresCouleur} onClick={saisirAvecClic} />
         </>
     );
 }

@@ -1,4 +1,4 @@
-export default function GetResultat(motDuJour,motEssaye, ligne)
+export default function GetResultat(motDuJour,motEssaye, ligne, lettresCouleur)
 {
     //gris : lettre pas contenu
     //jaune : mauvaise place
@@ -6,6 +6,7 @@ export default function GetResultat(motDuJour,motEssaye, ligne)
     let couleursLigne = [];
     let gagner = false;
     let points = 0;
+
     let nbLettresBonnes = 0;
     let lettresValides = motDuJour.split("");
     let lettresEssayes = motEssaye.split("");
@@ -15,21 +16,26 @@ export default function GetResultat(motDuJour,motEssaye, ligne)
         if(lettresValides[i]==lettresEssayes[i])
         {
             couleursLigne.push("green");
+            lettresCouleur[lettresEssayes[i]]="green"
             nbLettresBonnes +=1
             continue;
         }
         else if(lettresValides.includes(lettresEssayes[i]))
         {
             couleursLigne.push("yellow");
+            lettresCouleur[lettresEssayes[i]]="yellow"
+
         }
         else
         {
             couleursLigne.push("grey");
+            lettresCouleur[lettresEssayes[i]]="grey"
+
         }
     }
     gagner = nbLettresBonnes === lettresValides.length;
     if(gagner) points = GetPoints(ligne)
-    return [couleursLigne, gagner, points];
+    return [couleursLigne, gagner, points, lettresCouleur];
 
     function GetPoints(ligne)
     {
