@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import Timer from "../components/timer";
+import Timer from "../components/Timer";
 export default function Accueil() {
     const [pseudo, setPseudo] = useState("");
         const [pseudoTemp, setPseudoTemp] = useState("");

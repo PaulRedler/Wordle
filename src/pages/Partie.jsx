@@ -9,7 +9,7 @@ import Resultats from "../components/Resultats";
 import motExiste from "../services/ApiService";
 import Loading from "../components/Loading";
 import Clavier from "../components/Clavier"
-import Timer from "../components/timer";
+import Timer from "../components/Timer";
 
 export default function Partie() {
     const [motDuJour, setMotDuJour] = useState("");
