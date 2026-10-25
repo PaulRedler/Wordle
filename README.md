@@ -1,6 +1,6 @@
 # WORDAY – État d'avancement du projet
 
-https://wordle-c4xzbsbpg-zzs6.vercel.app/
+https://wordle-pi-ten.vercel.app/
 
 ## Palier visé
 
