@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router";
 import Accueil from "./pages/Accueil.jsx";
+import PartieDuJour from "./pages/PartieDuJour.jsx";
 import Partie from "./pages/Partie.jsx";
 import Regles from "./pages/Regles.jsx";
 import TableauScore from "./pages/TableauScore.jsx";
@@ -9,6 +10,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Accueil />} />
       <Route path="/partie" element={<Partie />} />
+      <Route path="/partiedujour" element={<PartieDuJour />} />
       <Route path="/accueil" element={<Accueil />} />
       <Route path="/regles" element={<Regles/>} />
       <Route path="/tableauscore" element={<TableauScore />} />

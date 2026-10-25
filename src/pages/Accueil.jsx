@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-
+import Timer from "../components/timer";
 export default function Accueil() {
     const [pseudo, setPseudo] = useState("");
         const [pseudoTemp, setPseudoTemp] = useState("");
@@ -64,12 +64,12 @@ useEffect(() => {
             }
 
 {pseudo !== "" && <button id="removePseudo" onClick={SupprimerPseudo}>Supprimer mon pseudo</button>}      
-        <Link to={`/Partie`}>Partie du jour</Link>
+        <Link to={`/Partie`}>Partie normale</Link>
+        <Link to={`/PartieDuJour`}>Partie du jour</Link>
         <Link to={`/TableauScore`}>Tableau des scores</Link>
-
         <Link to={`/Statistiques`}>Statistiques</Link>
-
         <Link to={`/Regles`}>Règles</Link>
+         <Timer/>
 
 
   </>

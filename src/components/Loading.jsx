@@ -1,4 +1,4 @@
-import "./Loading.css";
+import "./style/Loading.css";
 
 export default function Loading({ message = "Chargement..." }) {
     return (
