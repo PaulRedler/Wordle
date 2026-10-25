@@ -1,0 +1,72 @@
+.statistiques {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    color: inherit;
+}
+
+.stats-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.stat-valeur {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.stat-libelle {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.repartition {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.repartition-ligne {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.repartition-essais {
+    width: 16px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.repartition-barre-fond {
+    flex: 1;
+    height: 22px;
+    background: rgba(128, 128, 128, 0.25);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.repartition-barre {
+    height: 100%;
+    min-width: 2px;
+    background: #6aaa64;
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.repartition-nb {
+    width: 28px;
+    text-align: left;
+}

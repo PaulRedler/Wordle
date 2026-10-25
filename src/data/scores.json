@@ -1,0 +1,49 @@
+{
+  "parties": [
+    {
+      "id": 1,
+      "pseudo": "Alice",
+      "mot": "table",
+      "victoire": true,
+      "essais": 4,
+      "points": 300,
+      "date": "2026-10-20T18:32:10.000Z"
+    },
+    {
+      "id": 2,
+      "pseudo": "Bob",
+      "mot": "livre",
+      "victoire": true,
+      "essais": 3,
+      "points": 400,
+      "date": "2026-10-20T19:05:42.000Z"
+    },
+    {
+      "id": 3,
+      "pseudo": "Alice",
+      "mot": "plage",
+      "victoire": true,
+      "essais": 2,
+      "points": 500,
+      "date": "2026-10-21T09:15:03.000Z"
+    },
+    {
+      "id": 4,
+      "pseudo": "Alice",
+      "mot": "route",
+      "victoire": false,
+      "essais": 6,
+      "points": 0,
+      "date": "2026-10-22T12:40:27.000Z"
+    },
+    {
+      "id": 5,
+      "pseudo": "Bob",
+      "mot": "arbre",
+      "victoire": false,
+      "essais": 6,
+      "points": 0,
+      "date": "2026-10-22T14:02:51.000Z"
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+Palier visé : 4 
+
+Comportement en cas de problème avec l'API : on affiche un Toast avec un message d'erreur pendant quelques secondes demandant d'attendre avant de rejouer, si j'ai le temps j'aimerai desactiver l'appel a l'api pendant une 10aine de minutes pour jouer en mode hors ligne. 
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
