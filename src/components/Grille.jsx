@@ -5,7 +5,8 @@ export default function Grille({
     indexLigne,
     couleurs,
     grille,
-    onChange
+    onChange,
+    ligneQuiTremble 
 }) {
     const inputs = useRef([]);
 
@@ -20,6 +21,7 @@ export default function Grille({
                 ligne.map((lettre, j) => (
                     <input
                         key={`${i}-${j}`}
+                        className={i === ligneQuiTremble ? "tremble" : undefined}
                         ref={(element) => {
                             if (!inputs.current[i]) {
                                 inputs.current[i] = [];

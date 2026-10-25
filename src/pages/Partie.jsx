@@ -30,6 +30,10 @@ export default function Partie() {
     const [ligneQuiTremble, setLigneQuiTremble] = useState(null);
 
 
+const DUREE_TREMBLEMENT = 500;   // = 0,5 s
+const DUREE_RETOURNEMENT = 1800; // = 4 × 0,3 s de décalage + 0,6 s d'animation
+
+
     const [couleurs, setCouleurs] = useState([
         ["white","white","white","white","white"],
         ["white","white","white","white","white"],
@@ -106,7 +110,14 @@ const DUREE_TREMBLEMENT = 500;
 
     }
 
-
+function faireTrembler() {
+    setLigneQuiTremble(indexLigne);
+    setMotInvalide(true);
+    setTimeout(() => {
+        setLigneQuiTremble(null);
+        reinitialiserLigne(); 
+    }, DUREE_TREMBLEMENT);
+}
     function reinitialiserLigne()
     {
               setGrilleJeu(g =>
@@ -137,6 +148,7 @@ const DUREE_TREMBLEMENT = 500;
             {
                 setMotInvalide(true)
                 reinitialiserLigne()
+                    faireTrembler();
                             return false
             } 
             return true
@@ -150,6 +162,7 @@ const DUREE_TREMBLEMENT = 500;
         {
             setMotInvalide(true)
             reinitialiserLigne()
+            faireTrembler();
             return
         }
 
@@ -172,8 +185,8 @@ const DUREE_TREMBLEMENT = 500;
         setIndexColonne(0);
 
         if (result[1]) {
-            setVictoire(true);
-            addScore({
+        setTimeout(() => setVictoire(true), DUREE_RETOURNEMENT);
+                addScore({
                 pseudo: localStorage.getItem("pseudo") ?? "Anonyme",
                 mot: motDuJour,
                 victoire: true,
@@ -181,6 +194,7 @@ const DUREE_TREMBLEMENT = 500;
                 points: result[2]});
         }
         else if (!result[1] && indexLigne == 5) {
+            setTimeout(() => setDefaite(true), DUREE_RETOURNEMENT);
             setDefaite(true);
             addScore({
                 pseudo: localStorage.getItem("pseudo") ?? "Anonyme",
@@ -202,7 +216,7 @@ const DUREE_TREMBLEMENT = 500;
 
             <div id="grille">
             
-                <Grille indexColonne={indexColonne} indexLigne = {indexLigne }couleurs={couleurs} grille={grilleJeu} onChange={setGrilleJeu} />
+                <Grille indexColonne={indexColonne} indexLigne = {indexLigne }couleurs={couleurs} grille={grilleJeu} onChange={setGrilleJeu}  ligneQuiTremble={ligneQuiTremble}/>
             
             </div>
             <Clavier lettresCouleur={lettresCouleur} onClick={saisirAvecClic} />

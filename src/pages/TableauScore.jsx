@@ -16,8 +16,7 @@ export default function TableauScore({})
                 <p>{partie.essais}</p>
 
                 <p>{partie.points}</p>
-                <p>{partie.date}</p>
-
+                <p>{new Date(partie.date).toLocaleDateString("fr-FR")}</p>
 
             </div>
         ))}

@@ -1,10 +1,4 @@
-/* ==========================================================
-   WorDay : feuille de style globale
-   À importer en DERNIER dans main.jsx pour passer après
-   index.css / App.css : import "./style.css";
-   ========================================================== */
 
-/* ---------- Thème clair / sombre ---------- */
 :root {
     color-scheme: light dark;
     --bg: #ffffff;
@@ -32,7 +26,6 @@
     }
 }
 
-/* ---------- Base ---------- */
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -79,7 +72,6 @@ p {
     margin: 0.6rem 0;
 }
 
-/* ---------- Accueil ---------- */
 ul {
     display: grid;
     gap: 8px;
@@ -152,7 +144,6 @@ button:active {
     filter: none;
 }
 
-/* Liens de navigation et liens d'action (Accueil, Résultats, Règles) */
 a {
     display: inline-block;
     margin: 6px 4px;
@@ -174,7 +165,6 @@ a:active {
     transform: scale(0.97);
 }
 
-/* ---------- Partie : grille ---------- */
 #grille {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -221,7 +211,6 @@ a:active {
     color: #ffffff;
 }
 
-/* ---------- Partie : clavier (les boutons qui suivent la grille) ---------- */
 #grille ~ button {
     width: calc(10% - 7px);
     height: 52px;
@@ -250,7 +239,6 @@ a:active {
     color: #ffffff;
 }
 
-/* ---------- Toast ---------- */
 .toast {
     position: fixed;
     top: 16px;
@@ -294,9 +282,7 @@ a:active {
     }
 }
 
-/* ---------- Tableau des scores ----------
-   Une ligne = une div contenant un h1 suivi de six p :
-   pseudo, rang, mot, victoire, essais, points, date */
+
 div:has(> h1 + p + p + p + p + p + p) {
     display: grid;
     grid-template-columns: 2.6rem repeat(4, 1fr);
@@ -458,5 +444,46 @@ div:has(> h1 + p + p + p + p + p + p) > p:nth-of-type(6) {
         grid-template-columns: 2.2rem repeat(4, 1fr);
         padding: 8px 10px;
         font-size: 0.9rem;
+    }
+}
+/* ---------- Retournement des lettres, une à une ---------- */
+#grille input:nth-child(5n + 1) { --d: 0s; }
+#grille input:nth-child(5n + 2) { --d: 0.3s; }
+#grille input:nth-child(5n + 3) { --d: 0.6s; }
+#grille input:nth-child(5n + 4) { --d: 0.9s; }
+#grille input:nth-child(5n + 5) { --d: 1.2s; }
+
+#grille input[style*="green"],
+#grille input[style*="yellow"],
+#grille input[style*="grey"] {
+    animation: retourner 0.6s ease-in-out var(--d) both;
+    transition:
+        background-color 0.01s linear calc(var(--d) + 0.3s),
+        border-color 0.01s linear calc(var(--d) + 0.3s),
+        color 0.01s linear calc(var(--d) + 0.3s);
+}
+
+@keyframes retourner {
+    0%   { transform: rotateX(0); }
+    50%  { transform: rotateX(90deg); }
+    100% { transform: rotateX(0); }
+}
+
+#grille input.tremble {
+    border-color: #d9534f;
+    animation: trembler 0.5s ease-in-out;
+}
+
+@keyframes trembler {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-6px); }
+    40%, 60% { transform: translateX(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #grille input {
+        animation: none !important;
+        transition: none !important;
     }
 }
