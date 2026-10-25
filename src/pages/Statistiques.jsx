@@ -1,4 +1,3 @@
-import "./Statistiques.css";
 import {
     GetNombrePartiesJouees,
     GetPourcentageVictoire,

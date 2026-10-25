@@ -6,6 +6,7 @@ export default function Grille({
     couleurs,
     grille,
     onChange,
+    setIndexColonne,
     ligneQuiTremble 
 }) {
     const inputs = useRef([]);
@@ -39,7 +40,10 @@ export default function Grille({
                                 grille.map(ligne => [...ligne]);
 
                             nouvelleGrille[i][j] = e.target.value;
-
+                            if (e.target.value !== "" && j < 4) {
+                                setIndexColonne(j + 1);
+                                inputs.current[i][j + 1]?.focus();
+                            }
                             onChange(nouvelleGrille);
                         }}
                     />

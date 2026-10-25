@@ -1,3 +1,4 @@
+
 import motsSolutions from "../data/mots-solutions.json";
 
 export default function GetMotDuJour()
@@ -9,5 +10,10 @@ export default function GetMotDuJour()
     const nombreEnvoye = jour + mois %300;
     motDuJour = motsSolutions[nombreEnvoye];
     return motDuJour;
-    
+}
+
+export function GetMotAleatoire()
+{
+    const index = Math.floor(Math.random() * motsSolutions.length);
+    return motsSolutions[index];
 }

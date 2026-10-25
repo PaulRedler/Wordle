@@ -1,13 +1,15 @@
+
 import GetResultat from "../services/ResultatService";
 import {addScore} from "../services/ScoreService"
 import { useEffect, useState } from "react";
-import GetMotDuJour from "../services/MotDuJourService";
+import { GetMotAleatoire } from "../services/MotService";
 import Grille from "../components/Grille";
 import Toast from "../components/Toast";
 import Resultats from "../components/Resultats";
 import motExiste from "../services/ApiService";
 import Loading from "../components/Loading";
 import Clavier from "../components/Clavier"
+import Timer from "../components/timer";
 
 export default function Partie() {
     const [motDuJour, setMotDuJour] = useState("");
@@ -26,12 +28,10 @@ export default function Partie() {
     const[motInvalide, setMotInvalide]=useState(false)
     const[chargementApi, setChargementApi]=useState(false)
     const [apiInjoignable, setApiInjoignable] = useState(false);
-    const[afficherClavier, setAfficherClavier] = useState(true);
     const [ligneQuiTremble, setLigneQuiTremble] = useState(null);
 
-
-const DUREE_TREMBLEMENT = 500;   // = 0,5 s
-const DUREE_RETOURNEMENT = 1800; // = 4 × 0,3 s de décalage + 0,6 s d'animation
+    const DUREE_TREMBLEMENT = 500;  
+    const DUREE_RETOURNEMENT = 1800; 
 
 
     const [couleurs, setCouleurs] = useState([
@@ -50,6 +50,13 @@ const DUREE_RETOURNEMENT = 1800; // = 4 × 0,3 s de décalage + 0,6 s d'animatio
         ["", "", "", "", ""],
         ["", "", "", "", ""]
     ]);
+
+    useEffect(()=>
+    {
+        sauvegarderGrilleActuelle(grilleJeu)
+    }, [grilleJeu])
+
+
 useEffect(() => {
     const grille = document.getElementById("grille");
     if (!grille) return;
@@ -63,8 +70,6 @@ useEffect(() => {
             )
         );
     }
-const DUREE_RETOURNEMENT = 1800; 
-const DUREE_TREMBLEMENT = 500;
 
     function gererTouche(e) {
         if (indexLigne > 5) return; 
@@ -77,11 +82,12 @@ const DUREE_TREMBLEMENT = 500;
                 effacerCase(indexColonne - 1);
                 setIndexColonne(indexColonne - 1);
             }
-        } else if (e.key === "Enter"&& !chargementApi ) {
+        } 
+        else if (e.key === "Enter"&& !chargementApi ) {
             if (indexColonne === 4) {
                 VerifierMot();
             } else {
-                setIndexColonne(i => Math.min(4, i + 1));
+                return;
             }
         }
     }
@@ -92,23 +98,36 @@ const DUREE_TREMBLEMENT = 500;
 
 
     useEffect(() => {
-        const mot = GetMotDuJour();
-        setMotDuJour(mot);
-        console.log(mot);
+    const mot = GetMotAleatoire();
+    setMotDuJour(mot);
+
+    const grilleSauvegardee = localStorage.getItem("grille");
+
+    if (grilleSauvegardee) {
+        setGrilleJeu(JSON.parse(grilleSauvegardee));
+    }
     }, []);
 
-    function saisirAvecClic(lettre)
-    {
-         setGrilleJeu(g =>
-            g.map((ligne, i) =>
-                i === indexLigne
-                    ? ligne.map((c,j) => (j === indexColonne? c=lettre : c = c))
-                    : ligne
-            ));
-            if(indexColonne ==4) VerifierMot();
-                else setIndexColonne(indexColonne+1)
 
+    function sauvegarderGrilleActuelle(grille)
+    {
+        localStorage.setItem("grille", JSON.stringify(grille));
     }
+
+    
+    function saisirAvecClic(lettre) {
+    const nouvelleGrille = grilleJeu.map(ligne => [...ligne]);
+
+    nouvelleGrille[indexLigne][indexColonne] = lettre;
+
+    setGrilleJeu(nouvelleGrille);
+
+    if (indexColonne === 4) {
+        VerifierMot();
+    } else {
+        setIndexColonne(indexColonne + 1);
+    }
+}
 
 function faireTrembler() {
     setLigneQuiTremble(indexLigne);
@@ -212,14 +231,18 @@ function faireTrembler() {
         {defaite === true &&  <Toast titre="Defaite..." message={`Vous n'avez pas trouvé le mot ${motDuJour}`} setBooleen={setDefaite}/>}
         {motInvalide === true && <Toast titre = "Mot invalide" message={"le mot entré n'existe pas veuillez en saisir un nouveau"} tempsAffichage = {3500} setBooleen={setMotInvalide} />}
         {victoire === true && <Toast titre="Victoire!" message="Vous avez gagnez !" setBooleen={setVictoire} />}
-        {(defaite == true ||victoire == true) && <Resultats points = {points} motDuJour={motDuJour}/>}
 
             <div id="grille">
             
-                <Grille indexColonne={indexColonne} indexLigne = {indexLigne }couleurs={couleurs} grille={grilleJeu} onChange={setGrilleJeu}  ligneQuiTremble={ligneQuiTremble}/>
+                <Grille indexColonne={indexColonne} indexLigne = {indexLigne }couleurs={couleurs} grille={grilleJeu} onChange={setGrilleJeu}  setIndexColonne={setIndexColonne}  ligneQuiTremble={ligneQuiTremble}/>
             
             </div>
             <Clavier lettresCouleur={lettresCouleur} onClick={saisirAvecClic} />
+            
+        {(defaite == true ||victoire == true) && <Timer/> } 
+        {(defaite == true ||victoire == true) && <Resultats points = {points} motDuJour={motDuJour}/> } 
+
+
         </>
     );
 }
